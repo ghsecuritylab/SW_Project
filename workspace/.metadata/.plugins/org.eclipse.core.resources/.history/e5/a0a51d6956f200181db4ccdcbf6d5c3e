@@ -124,7 +124,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
   debug_init(&huart3);
 
-  xprintf("dziala!!!\n");
+  xprintf("dziala!!!\n")
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN RTOS_MUTEX */

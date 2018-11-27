@@ -28,7 +28,7 @@
 
 #define USE_HAL		0
 
-UART_HandleTypeDef* pUart = NULL;
+UART_HandleTypeDef* pUart = USART3;
 
 void debug_shdn(uint32_t shdn_on)
 {
