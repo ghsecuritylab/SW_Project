@@ -67,8 +67,8 @@
 #include "stm32f7xx.h"
 #include "stm32f7xx_hal_rcc.h"
 #include "stm32f7xx_hal_gpio.h"
-#include "tm_stm32f7_spi.h"
-#include "defines.h"
+#include "tm_stm32f4_spi.h"
+//#include "defines.h"
 
 /**
  * Pinout
@@ -83,9 +83,9 @@
 
 /* Default CS pin used */
 #ifndef MFRC522_CS_PIN
-#define MFRC522_CS_RCC					RCC_AHB1Periph_GPIOG
-#define MFRC522_CS_PORT					GPIOG
-#define MFRC522_CS_PIN					GPIO_Pin_2
+#define MFRC522_CS_RCC					RCC_AHB1RSTR_GPIOGRST //TODO
+#define MFRC522_CS_PORT					GPIOD
+#define MFRC522_CS_PIN					GPIO_Pin_14
 #endif
 
 /**
