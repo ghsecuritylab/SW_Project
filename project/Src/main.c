@@ -55,6 +55,8 @@
 
 /* USER CODE BEGIN Includes */
 
+#include "rfid-rc522.h"
+
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -122,9 +124,10 @@ int main(void)
   MX_USB_OTG_FS_PCD_Init();
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
+
+  RFID_RC522_Init();
   debug_init(&huart3);
 
-  xprintf("dziala!!!\n");
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN RTOS_MUTEX */
@@ -257,6 +260,7 @@ static void MX_SPI1_Init(void)
   hspi1.Init.CRCPolynomial = 7;
   hspi1.Init.CRCLength = SPI_CRC_LENGTH_DATASIZE;
   hspi1.Init.NSSPMode = SPI_NSS_PULSE_ENABLE;
+
   if (HAL_SPI_Init(&hspi1) != HAL_OK)
   {
     _Error_Handler(__FILE__, __LINE__);
@@ -378,14 +382,45 @@ void StartDefaultTask(void const * argument)
   MX_LWIP_Init();
 
   /* USER CODE BEGIN 5 */
+
+  xprintf("Start!! <3\n\r");
+
   /* Infinite loop */
   for(;;)
   {
     osDelay(1000);
 	HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
-	HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-	HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
-	xprintf("XDD");
+//	HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+//	HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
+	xprintf("a\n\r");
+
+	uint8_t CardID[4];
+	uint8_t type;
+	char *result;
+
+    int status = TM_MFRC522_Check(CardID, &type);
+	if (status == MI_OK) {
+		xprintf ((char *)"Found tag: ");
+		bin_to_strhex((unsigned char *)CardID, sizeof(CardID), &result);
+		xprintf((char *)result);
+		xprintf((char *)"\n\r");
+		xprintf((char *)"Type is: ");
+		bin_to_strhex((unsigned char *)&type, 1, &result);
+		xprintf((char *)result);
+		xprintf((char *)"\n\r");
+
+	} else {
+		if (status == MI_TIMEOUT) {
+			xprintf((char *)"No tag found.\n\r");
+		}
+		if (status == MI_ERR) {
+			xprintf((char *)"Error.\n\r");
+		}
+	}
+
+
+
+
   }
   /* USER CODE END 5 */ 
 }

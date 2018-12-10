@@ -114,12 +114,58 @@
 
 /* ########################## Assert Selection ############################## */
 /**
-  * @brief Uncomment the line below to expanse the "assert_param" macro in the 
+  * @brief Uncomment the line below to expanse the "assert_param" macro in the
   *        HAL drivers code
   */
 /* #define USE_FULL_ASSERT    1U */
 
 /* USER CODE BEGIN Private defines */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Definition for SPIx Pins */
+#define SPIx_SCK_PIN                     GPIO_PIN_12 // D13
+#define SPIx_SCK_GPIO_PORT               GPIOA
+#define SPIx_SCK_AF                      GPIO_AF5_SPI2
+#define SPIx_MISO_PIN                    GPIO_PIN_14 // D12
+#define SPIx_MISO_GPIO_PORT              GPIOB
+#define SPIx_MISO_AF                     GPIO_AF5_SPI2
+#define SPIx_MOSI_PIN                    GPIO_PIN_15 // D11
+#define SPIx_MOSI_GPIO_PORT              GPIOB
+#define SPIx_MOSI_AF                     GPIO_AF5_SPI2
+#define SPIx_NSS_PIN					 GPIO_PIN_11 // D10
+#define SPIx_NSS_GPIO_PORT				 GPIOA
+#define SPIx_NSS_AF						 GPIO_AF5_SPI2
+#define SPIx_CS_PIN                      GPIO_PIN_6 // D9
+#define SPIx_CS_GPIO_PORT                GPIOH
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* USER CODE END Private defines */
 
