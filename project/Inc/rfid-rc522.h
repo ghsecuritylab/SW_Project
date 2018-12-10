@@ -43,6 +43,7 @@
 #include "stm32f7xx_hal_rcc.h"
 #include "stm32f7xx_hal_gpio.h"
 #include "main.h"
+
 /**
  * Pinout
 */

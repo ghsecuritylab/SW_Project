@@ -19,6 +19,10 @@
 #include "rfid-rc522.h"
 #include <stdlib.h>
 
+
+//XPRINTFS
+#include "term_io.h"
+
 extern SPI_HandleTypeDef hspi1;
 
 void RFID_RC522_Init(void) {
@@ -49,6 +53,7 @@ TM_MFRC522_Status_t TM_MFRC522_Check(uint8_t* id, uint8_t* type) {
 	status = TM_MFRC522_Request(PICC_REQIDL, id);
 
 	if (status == MI_OK) {
+		xprintf("MI_OK in check\n\r");
 		//Card detected
 		//Anti-collision, return card serial number 4 bytes
 		status = TM_MFRC522_Anticoll(id);
@@ -85,7 +90,7 @@ void TM_MFRC522_WriteRegister(uint8_t addr, uint8_t val) {
 	TM_MFRC522_CS_Write(GPIO_PIN_RESET);
 
 	HAL_StatusTypeDef transmitStatus;
-	
+
 	//Send address ## HAL_MAX_DELAY --> infinite poll until process is successful
 	addr = (addr << 1) & 0x7E;
 
@@ -165,6 +170,7 @@ TM_MFRC522_Status_t TM_MFRC522_Request(uint8_t reqMode, uint8_t* TagType) {
 	status = TM_MFRC522_ToCard(PCD_TRANSCEIVE, TagType, 1, TagType, &backBits);
 
 	if (status == MI_OK && backBits != 0x10) {
+		xprintf("MI_OK in request\n\r");
 		status = MI_ERR;
 	}
 	return status;
@@ -236,8 +242,10 @@ TM_MFRC522_Status_t TM_MFRC522_ToCard(uint8_t command, // the command to execute
 
 	uint8_t errorRegValue = 0x00;
 	errorRegValue = TM_MFRC522_ReadRegister(MFRC522_REG_ERROR);
-	if (errorRegValue & 0x13) {	 // BufferOvfl ParityErr ProtocolErr	
+	if (errorRegValue & 0x13) {	 // BufferOvfl ParityErr ProtocolErr
 		//LCD_UsrLog ((char *)"We have an error.\n");
+
+		xprintf("error z powodu przerwania polaczenia, chyba \n\r");
 
 		status = MI_ERR;
 		return status;
@@ -245,10 +253,16 @@ TM_MFRC522_Status_t TM_MFRC522_ToCard(uint8_t command, // the command to execute
 
 	if (i == 0) {
 		//LCD_UsrLog ((char *)"I went to zero.\n");
+
+		xprintf("timeout bo skonczyl sie czas \n\r");
+
 		return MI_TIMEOUT;
 	}
 
 	if (n & 0x01 && !(n&waitIRq)) {
+
+		xprintf("timeout nie wiemy czemu\n\r");
+
 		//char inty[15];
 		//sprintf(inty, "%d", i);
 		//LCD_UsrLog ((char *)"Timer timeouted\n");
@@ -287,7 +301,7 @@ TM_MFRC522_Status_t TM_MFRC522_ToCard(uint8_t command, // the command to execute
 
 				//char inty[15];
 				//LCD_UsrLog ((char *)"\n");
-				//sprintf(inty, "%d", *backLen);
+				xprintf("backLen: %d", *backLen);
 				//LCD_UsrLog (inty);
 				//LCD_UsrLog ((char *)"Back length\n");
 
@@ -301,6 +315,8 @@ TM_MFRC522_Status_t TM_MFRC522_ToCard(uint8_t command, // the command to execute
 				}
 			}
 		} else {
+
+			xprintf("ostatni error, cos nie smiga\n\r");
 			return MI_ERR;
 		}
 	} else {
@@ -446,5 +462,5 @@ void bin_to_strhex(unsigned char *bin, unsigned int binsz, char **result)
     {
       (*result)[i * 2 + 2] = hex_str[(bin[i] >> 4) & 0x0F];
       (*result)[i * 2 + 3] = hex_str[(bin[i]     ) & 0x0F];
-    }  
+    }
 }

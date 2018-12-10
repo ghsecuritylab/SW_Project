@@ -51,11 +51,12 @@
 #include "stm32f7xx_hal.h"
 #include "cmsis_os.h"
 #include "lwip.h"
-#include "term_io.h"
 
 /* USER CODE BEGIN Includes */
 
 #include "rfid-rc522.h"
+#include "term_io.h"
+
 
 /* USER CODE END Includes */
 
@@ -244,6 +245,9 @@ void SystemClock_Config(void)
 /* SPI1 init function */
 static void MX_SPI1_Init(void)
 {
+	SPIx_FORCE_RESET();
+	SPIx_RELEASE_RESET();
+	SPIx_CLK_ENABLE();
 
   /* SPI1 parameter configuration*/
   hspi1.Instance = SPI1;
@@ -261,10 +265,35 @@ static void MX_SPI1_Init(void)
   hspi1.Init.CRCLength = SPI_CRC_LENGTH_DATASIZE;
   hspi1.Init.NSSPMode = SPI_NSS_PULSE_ENABLE;
 
+  HAL_Delay(20);
+
   if (HAL_SPI_Init(&hspi1) != HAL_OK)
   {
     _Error_Handler(__FILE__, __LINE__);
   }
+
+//	/* SPI1 parameter configuration*/
+//	hspi1.Instance = SPI1;
+//	hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_32;
+//	hspi1.Init.Direction = SPI_DIRECTION_2LINES;
+//	hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
+//	hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
+//	hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
+//	hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
+//	hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
+//	hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+//	hspi1.Init.NSS = SPI_NSS_SOFT;
+//	hspi1.Init.Mode = SPI_MODE_MASTER;
+//	hspi1.Init.CRCPolynomial = 7;
+//	hspi1.Init.CRCLength = SPI_CRC_LENGTH_DATASIZE;
+//	hspi1.Init.NSSPMode = SPI_NSS_PULSE_ENABLE;
+//
+//	HAL_Delay(5);
+//
+//	if (HAL_SPI_Init(&hspi1) != HAL_OK)
+//	{
+//		_Error_Handler(__FILE__, __LINE__);
+//	}
 
 }
 
@@ -392,7 +421,7 @@ void StartDefaultTask(void const * argument)
 	HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
 //	HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
 //	HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
-	xprintf("a\n\r");
+	xprintf("\n\r");
 
 	uint8_t CardID[4];
 	uint8_t type;
