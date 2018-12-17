@@ -78,9 +78,9 @@ osThreadId defaultTaskHandle;
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
-static void MX_USART3_UART_Init(void);
 static void MX_USB_OTG_FS_PCD_Init(void);
 static void MX_SPI1_Init(void);
+static void MX_USART3_UART_Init(void);
 void StartDefaultTask(void const * argument);
 
 /* USER CODE BEGIN PFP */
@@ -121,11 +121,10 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_USART3_UART_Init();
   MX_USB_OTG_FS_PCD_Init();
   MX_SPI1_Init();
+  MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
-
   RFID_RC522_Init();
   debug_init(&huart3);
 
@@ -245,55 +244,26 @@ void SystemClock_Config(void)
 /* SPI1 init function */
 static void MX_SPI1_Init(void)
 {
-	SPIx_FORCE_RESET();
-	SPIx_RELEASE_RESET();
-	SPIx_CLK_ENABLE();
 
   /* SPI1 parameter configuration*/
   hspi1.Instance = SPI1;
   hspi1.Init.Mode = SPI_MODE_MASTER;
   hspi1.Init.Direction = SPI_DIRECTION_2LINES;
-  hspi1.Init.DataSize = SPI_DATASIZE_4BIT;
+  hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
   hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
   hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
   hspi1.Init.NSS = SPI_NSS_SOFT;
-  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_32;
   hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
   hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
   hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
   hspi1.Init.CRCPolynomial = 7;
   hspi1.Init.CRCLength = SPI_CRC_LENGTH_DATASIZE;
   hspi1.Init.NSSPMode = SPI_NSS_PULSE_ENABLE;
-
-  HAL_Delay(20);
-
   if (HAL_SPI_Init(&hspi1) != HAL_OK)
   {
     _Error_Handler(__FILE__, __LINE__);
   }
-
-//	/* SPI1 parameter configuration*/
-//	hspi1.Instance = SPI1;
-//	hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_32;
-//	hspi1.Init.Direction = SPI_DIRECTION_2LINES;
-//	hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
-//	hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
-//	hspi1.Init.DataSize = SPI_DATASIZE_8BIT;
-//	hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
-//	hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
-//	hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
-//	hspi1.Init.NSS = SPI_NSS_SOFT;
-//	hspi1.Init.Mode = SPI_MODE_MASTER;
-//	hspi1.Init.CRCPolynomial = 7;
-//	hspi1.Init.CRCLength = SPI_CRC_LENGTH_DATASIZE;
-//	hspi1.Init.NSSPMode = SPI_NSS_PULSE_ENABLE;
-//
-//	HAL_Delay(5);
-//
-//	if (HAL_SPI_Init(&hspi1) != HAL_OK)
-//	{
-//		_Error_Handler(__FILE__, __LINE__);
-//	}
 
 }
 
@@ -364,6 +334,12 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOB, LD1_Pin|LD3_Pin|LD2_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_9, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOD, SPI_CS_Pin|RFID_RST_Pin, GPIO_PIN_SET);
+
+  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(USB_PowerSwitchOn_GPIO_Port, USB_PowerSwitchOn_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : USER_Btn_Pin */
@@ -378,6 +354,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PD9 SPI_CS_Pin RFID_RST_Pin */
+  GPIO_InitStruct.Pin = GPIO_PIN_9|SPI_CS_Pin|RFID_RST_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
   /*Configure GPIO pin : USB_PowerSwitchOn_Pin */
   GPIO_InitStruct.Pin = USB_PowerSwitchOn_Pin;

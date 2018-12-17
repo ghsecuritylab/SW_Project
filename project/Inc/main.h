@@ -83,8 +83,10 @@
 #define LD3_GPIO_Port GPIOB
 #define STLK_RX_Pin GPIO_PIN_8
 #define STLK_RX_GPIO_Port GPIOD
-#define STLK_TX_Pin GPIO_PIN_9
-#define STLK_TX_GPIO_Port GPIOD
+#define SPI_CS_Pin GPIO_PIN_14
+#define SPI_CS_GPIO_Port GPIOD
+#define RFID_RST_Pin GPIO_PIN_15
+#define RFID_RST_GPIO_Port GPIOD
 #define USB_PowerSwitchOn_Pin GPIO_PIN_6
 #define USB_PowerSwitchOn_GPIO_Port GPIOG
 #define USB_OverCurrent_Pin GPIO_PIN_7
@@ -114,52 +116,13 @@
 
 /* ########################## Assert Selection ############################## */
 /**
-  * @brief Uncomment the line below to expanse the "assert_param" macro in the
+  * @brief Uncomment the line below to expanse the "assert_param" macro in the 
   *        HAL drivers code
   */
 /* #define USE_FULL_ASSERT    1U */
 
 /* USER CODE BEGIN Private defines */
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-///* Definition for SPIx Pins */
-//#define SPIx_SCK_PIN                     GPIO_PIN_5 // D13
-//#define SPIx_SCK_GPIO_PORT               GPIOA
-//#define SPIx_SCK_AF                      GPIO_AF5_SPI1
-//#define SPIx_MISO_PIN                    GPIO_PIN_6 // D12
-//#define SPIx_MISO_GPIO_PORT              GPIOA
-//#define SPIx_MISO_AF                     GPIO_AF5_SPI1
-//#define SPIx_MOSI_PIN                    GPIO_PIN_7 // D11
-//#define SPIx_MOSI_GPIO_PORT              GPIOA
-//#define SPIx_MOSI_AF                     GPIO_AF5_SPI1
-//#define SPIx_NSS_PIN					 GPIO_PIN_14 // D10
-//#define SPIx_NSS_GPIO_PORT				 GPIOD
-//#define SPIx_NSS_AF						 GPIO_AF5_SPI1
-
-#define SPIx                             SPI1
-#define SPIx_CLK_ENABLE()                __HAL_RCC_SPI1_CLK_ENABLE()
-#define SPIx_SCK_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOA_CLK_ENABLE()
-#define SPIx_NSS_GPIO_CLK_ENABLE()       __HAL_RCC_GPIOD_CLK_ENABLE()
-#define SPIx_MISO_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOA_CLK_ENABLE()
-#define SPIx_MOSI_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOA_CLK_ENABLE()
-#define SPIx_CS_GPIO_CLK_ENABLE()		__HAL_RCC_GPIOD_CLK_ENABLE()
-
-#define SPIx_FORCE_RESET()               __HAL_RCC_SPI1_FORCE_RESET()
-#define SPIx_RELEASE_RESET()             __HAL_RCC_SPI1_RELEASE_RESET()
 
 ///* Definition for SPIx Pins */
 #define SPIx_SCK_PIN                     GPIO_PIN_5 // D13
@@ -168,29 +131,14 @@
 #define SPIx_MISO_PIN                    GPIO_PIN_6 // D12
 #define SPIx_MISO_GPIO_PORT              GPIOA
 #define SPIx_MISO_AF                     GPIO_AF5_SPI1
-#define SPIx_MOSI_PIN                    GPIO_PIN_7 // D11
-#define SPIx_MOSI_GPIO_PORT              GPIOA
+#define SPIx_MOSI_PIN                    GPIO_PIN_5 // D11
+#define SPIx_MOSI_GPIO_PORT              GPIOB
 #define SPIx_MOSI_AF                     GPIO_AF5_SPI1
-#define SPIx_NSS_PIN					 GPIO_PIN_14 // D10
-#define SPIx_NSS_GPIO_PORT				 GPIOD
-#define SPIx_NSS_AF						 GPIO_AF5_SPI1
-#define SPIx_CS_PIN                      GPIO_PIN_15 // D9
+//#define SPIx_NSS_PIN					 GPIO_PIN_14 // D10
+//#define SPIx_NSS_GPIO_PORT				 GPIOD
+//#define SPIx_NSS_AF						 GPIO_AF5_SPI1
+#define SPIx_CS_PIN                      GPIO_PIN_14 // D10
 #define SPIx_CS_GPIO_PORT                GPIOD
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /* USER CODE END Private defines */
