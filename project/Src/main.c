@@ -56,6 +56,8 @@
 
 #include "rfid-rc522.h"
 #include "term_io.h"
+#include "httpserver-netconn.h"
+#include "tag_scanner.h"
 
 
 /* USER CODE END Includes */
@@ -63,15 +65,15 @@
 /* Private variables ---------------------------------------------------------*/
 
 SPI_HandleTypeDef hspi1;
-
 UART_HandleTypeDef huart3;
-
 PCD_HandleTypeDef hpcd_USB_OTG_FS;
-
 osThreadId defaultTaskHandle;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
+extern struct netif gnetif;
+int privilage_status = 2;
+int add_admin = 0;
 
 /* USER CODE END PV */
 
@@ -124,6 +126,7 @@ int main(void)
   MX_USB_OTG_FS_PCD_Init();
   MX_SPI1_Init();
   MX_USART3_UART_Init();
+
   /* USER CODE BEGIN 2 */
   RFID_RC522_Init();
   debug_init(&huart3);
@@ -379,6 +382,19 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 
+
+//tmp
+int check_tag_if_admin(char * CardID) {
+
+	if(strcmp(CardID, "0xc48150d3") == 0)
+		return 1;
+	return 0;
+}
+
+
+
+
+
 /* USER CODE END 4 */
 
 /* USER CODE BEGIN Header_StartDefaultTask */
@@ -397,42 +413,33 @@ void StartDefaultTask(void const * argument)
 
   xprintf("Start!! <3\n\r");
 
+  while(gnetif.ip_addr.addr == 0)
+  {
+	  osDelay(1000);
+	  xprintf("Waiting for ip...\n\r");
+  }
+  xprintf("Our ip address is: %u.%u.%u.%u\n\r\n\r",
+		  ip4_addr1(&gnetif.ip_addr),
+		  ip4_addr2(&gnetif.ip_addr),
+		  ip4_addr3(&gnetif.ip_addr),
+		  ip4_addr4(&gnetif.ip_addr));
+  xprintf("Connect to: %u.%u.%u.%u:80/index.html\n\r\n\r",
+  		  ip4_addr1(&gnetif.ip_addr),
+  		  ip4_addr2(&gnetif.ip_addr),
+  		  ip4_addr3(&gnetif.ip_addr),
+  		  ip4_addr4(&gnetif.ip_addr));
+  osDelay(1000);
+  privilage_status = 2;
+  http_server_netconn_init();
+  tag_scanner_init();
+
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1000);
-	HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
-//	HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-//	HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
-	xprintf("\n\r");
-
-	uint8_t CardID[4];
-	uint8_t type;
-	char *result;
-
-    int status = TM_MFRC522_Check(CardID, &type);
-	if (status == MI_OK) {
-		xprintf ((char *)"Found tag: ");
-		bin_to_strhex((unsigned char *)CardID, sizeof(CardID), &result);
-		xprintf((char *)result);
-		xprintf((char *)"\n\r");
-		xprintf((char *)"Type is: ");
-		bin_to_strhex((unsigned char *)&type, 1, &result);
-		xprintf((char *)result);
-		xprintf((char *)"\n\r");
-
-	} else {
-		if (status == MI_TIMEOUT) {
-			xprintf((char *)"No tag found.\n\r");
-		}
-		if (status == MI_ERR) {
-			xprintf((char *)"Error.\n\r");
-		}
-	}
-
-
-
-
+    osDelay(120000); // wait 2 minutes, then change privileges to other
+    // TODO probably won't work since thread priority too small
+    privilage_status = ADMIN_PRIVILAGE;
+    xprintf("main looop\n\r");
   }
   /* USER CODE END 5 */ 
 }
