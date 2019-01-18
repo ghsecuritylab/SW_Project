@@ -71,8 +71,9 @@ tag_scanner_thread() {
 			xprintf((char *)result);
 			xprintf((char *)"\n\r");
 
-			if(privilage_status == ADMIN_PRIVILAGE && add_admin == 1) {
+			if(privilage_status == ADMIN_PRIVILAGE && add_admin == WAITING_FOR_TAG) {
 				add_to_admin_list(hash_id(CardID));
+				add_admin = ADMIN_JUST_ADDED;
 			} else {
 				adjust_privilages(CardID);
 			}

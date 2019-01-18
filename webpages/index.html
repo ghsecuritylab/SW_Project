@@ -12,32 +12,32 @@
 	  <div class="panel-body">
 	    <div class="row">
 		  <div class="col-md-6 cell">
-		  	<form class="form-layout" action="led" method="get">
-				<button style="background: lightgreen;" class="led-button" name="led_nr" type="submit" value="1">
+		  	<div class="form-layout">
+				<button style="background: lightgreen;" class="led-button" onclick="httpGetAsync('/led1');">
 					Green LED
 				</button>
-				<button id="b-blue" style="background: lightblue;" class="led-button" class="led-button" name="led_nr" type="submit" value="2" disabled>
+				<button id="b-blue" style="background: lightblue;" class="led-button" class="led-button" onclick="httpGetAsync('/led2');" disabled>
 					Blue LED
 				</button>
-				<button id="b-red" style="background: tomato;" class="led-button" class="led-button" name="led_nr" type="submit" value="3" disabled>
+				<button id="b-red" style="background: tomato;" class="led-button" class="led-button" onclick="httpGetAsync('/led3');" disabled>
 					Red LED
 				</button>
-			</form>
+			</div>
 		  </div>
 		</div>
 		<div class="row">
-			<form action="adminID" method="get">
-			  	<button id="submit" style="background: green;" class="led-button" type="submit" disabled>
+			<div>
+			  	<button id="submit" style="background: green;" class="led-button" onclick="addAdmin();" disabled>
 					Add admin
 				</button>
-			</form>
+			</div>
 		</div>
 		<div class="row">
-			<form action="logout" method="get">
-				<button id="logout" name="led_nr" type="submit" disabled>
+			<div>
+				<button id="logout" name="led_nr" onclick="logout();" disabled>
 					Log out
 				</button>
-			</form>
+			</div>
 		</div>
 	</div>
 </div>

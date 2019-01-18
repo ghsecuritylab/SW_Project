@@ -78,7 +78,13 @@ void http_server_serve(struct netconn *conn)
 		  if (strncmp((char const *)buf,"GET /stat",9)==0) {
 			  char priv_str[1];
 			  priv_str[0] = (char) privilage_status + '0';
-			  netconn_write(conn, priv_str, 1, NETCONN_NOCOPY);
+			  if(add_admin == ADMIN_JUST_ADDED) {
+				  add_admin = NOT_ACTIVE;
+				  netconn_write(conn, ADMIN_ADDED_STATUS, 1, NETCONN_NOCOPY);
+			  } else {
+				  netconn_write(conn, priv_str, 1, NETCONN_NOCOPY);
+			  }
+
 		  }
        	  if (strncmp((char const *)buf,"GET /index.html",15)==0) {
         		  netconn_write(conn, (const unsigned char*)index_h, index_h_length, NETCONN_NOCOPY);
@@ -89,38 +95,28 @@ void http_server_serve(struct netconn *conn)
 		  if (strncmp((char const *)buf,"GET /mystyle.css",16)==0) {
 			  netconn_write(conn, (const unsigned char*)mystyle_h, mystyle_h_length, NETCONN_NOCOPY);
 		  }
-		  if (strncmp((char const *)buf,"GET /led?led_nr=1", 17) == 0) {
-			  xprintf("led1\r\n");
+		  if (strncmp((char const *)buf,"GET /led1", 9) == 0) {
 			  HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
-			  netconn_write(conn, (const unsigned char*)index_h, index_h_length, NETCONN_NOCOPY);
+			  netconn_write(conn, "200", 3, NETCONN_NOCOPY);
 		  }
-		  if (strncmp((char const *)buf,"GET /logout?led_nr=", 19) == 0) {
-			  xprintf("logout");
+		  if (strncmp((char const *)buf,"GET /logout", 11) == 0) {
 			  privilage_status = OTHER_PRIVILAGE;
-			  netconn_write(conn, (const unsigned char*)index_h, index_h_length, NETCONN_NOCOPY);
-		  }
-		  if (strncmp((char const *)buf,"GET /cancel", 11) == 0) {
-			  xprintf("cancel_adding");
-			  add_admin = 0;
-			  netconn_write(conn, (const unsigned char*)index_h, index_h_length, NETCONN_NOCOPY);
+			  netconn_write(conn, "200", 3, NETCONN_NOCOPY);
 		  }
     	  if(privilage_status <= USER_PRIVILAGE) {
-        	  if (strncmp((char const *)buf,"GET /led?led_nr=2", 17) == 0) {
-        		  xprintf("led2\r\n");
+        	  if (strncmp((char const *)buf,"GET /led2", 9) == 0) {
         		  HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-        		  netconn_write(conn, (const unsigned char*)index_h, index_h_length, NETCONN_NOCOPY);
+        		  netconn_write(conn, "200", 3, NETCONN_NOCOPY);
         	  }
     	  }
     	  if(privilage_status == ADMIN_PRIVILAGE) {
-			  if (strncmp((char const *)buf,"GET /led?led_nr=3", 17) == 0) {
-				  xprintf("led3\r\n");
+			  if (strncmp((char const *)buf,"GET /led3", 9) == 0) {
 				  HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
-				  netconn_write(conn, (const unsigned char*)index_h, index_h_length, NETCONN_NOCOPY);
+				  netconn_write(conn, "200", 3, NETCONN_NOCOPY);
 			  }
-			  if (strncmp((char const *)buf,"GET /adminID", 12) == 0) {
-				  xprintf("add_admin");
-				  add_admin = 1;
-				  netconn_write(conn, (const unsigned char*)index_h, index_h_length, NETCONN_NOCOPY);
+			  if (strncmp((char const *)buf,"GET /addadmin", 13) == 0) {
+				  add_admin = WAITING_FOR_TAG;
+				  netconn_write(conn, "200", 3, NETCONN_NOCOPY);
 			  }
     	  }
       }
@@ -159,12 +155,6 @@ static void http_server_netconn_thread()
   
       while(1)
       {
-    	  if(privilage_status == 0)
-    		  xprintf("admin\n\r");
-    	  if(privilage_status == 1)
-    		  xprintf("user\n\r");
-    	  if(privilage_status == 2)
-    		  xprintf("other\n\r");
     	  osDelay(10);
         /* accept any icoming connection */
         accept_err = netconn_accept(conn, &newconn);

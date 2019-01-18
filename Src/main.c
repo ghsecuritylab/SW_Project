@@ -72,8 +72,8 @@ osThreadId defaultTaskHandle;
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
 extern struct netif gnetif;
-int privilage_status = 2;
-int add_admin = 0;
+int privilage_status = OTHER_PRIVILAGE;
+int add_admin = NOT_ACTIVE;
 
 /* USER CODE END PV */
 
@@ -429,7 +429,6 @@ void StartDefaultTask(void const * argument)
   		  ip4_addr3(&gnetif.ip_addr),
   		  ip4_addr4(&gnetif.ip_addr));
   osDelay(1000);
-  privilage_status = 2;
   http_server_netconn_init();
   tag_scanner_init();
 
@@ -437,9 +436,6 @@ void StartDefaultTask(void const * argument)
   for(;;)
   {
     osDelay(120000); // wait 2 minutes, then change privileges to other
-    // TODO probably won't work since thread priority too small
-    privilage_status = OTHER_PRIVILAGE;
-    xprintf("main looop\n\r");
   }
   /* USER CODE END 5 */ 
 }

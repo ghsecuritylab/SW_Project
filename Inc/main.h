@@ -124,24 +124,12 @@
 /* USER CODE BEGIN Private defines */
 
 
-///* Definition for SPIx Pins */
-#define SPIx_SCK_PIN                     GPIO_PIN_5 // D13
-#define SPIx_SCK_GPIO_PORT               GPIOA
-#define SPIx_SCK_AF                      GPIO_AF5_SPI1
-#define SPIx_MISO_PIN                    GPIO_PIN_6 // D12
-#define SPIx_MISO_GPIO_PORT              GPIOA
-#define SPIx_MISO_AF                     GPIO_AF5_SPI1
-#define SPIx_MOSI_PIN                    GPIO_PIN_5 // D11
-#define SPIx_MOSI_GPIO_PORT              GPIOB
-#define SPIx_MOSI_AF                     GPIO_AF5_SPI1
-//#define SPIx_NSS_PIN					 GPIO_PIN_14 // D10
-//#define SPIx_NSS_GPIO_PORT				 GPIOD
-//#define SPIx_NSS_AF						 GPIO_AF5_SPI1
+/* Definition for SPIx Pins */
+
 #define SPIx_CS_PIN                      GPIO_PIN_14 // D10
 #define SPIx_CS_GPIO_PORT                GPIOD
 
-extern int privilage_status;
-extern int add_admin;
+
 
 
 /* USER CODE END Private defines */
