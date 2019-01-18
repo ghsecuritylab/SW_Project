@@ -20,11 +20,15 @@ function httpGetAsync(theUrl, callback) {
 
 function addAdmin() {
 	httpGetAsync('/addadmin');
-	alert('Waiting for tag');
+	async_alert('Waiting for tag');
 }
 
 function logout() {
 	httpGetAsync('/logout');
+}
+
+function async_alert(str) {
+	setTimeout( () => alert(str) );
 }
 
 function twiddleDOM(param) {
@@ -32,19 +36,19 @@ function twiddleDOM(param) {
 		return;
 	}
 	if (param == ADMIN_PRIVILAGE) {
-		alert("Logged as admin");
 		document.getElementById("b-blue").disabled = false;
 		document.getElementById("b-red").disabled = false;
 		document.getElementById("submit").disabled = false;
 		document.getElementById("logout").disabled = false;
 		status = param;
+		async_alert("Logged as admin");
 	} else if (param == USER_PRIVILAGE) {
-		alert("Logged as user");
 		document.getElementById("b-blue").disabled = false;
 		document.getElementById("b-red").disabled = true;
 		document.getElementById("submit").disabled = true;
 		document.getElementById("logout").disabled = false;
 		status = param;
+		async_alert("Logged as user");
 	} else if (param == OTHER_PRIVILAGE) {
 		document.getElementById("b-blue").disabled = true;
 		document.getElementById("b-red").disabled = true;
@@ -52,7 +56,7 @@ function twiddleDOM(param) {
 		document.getElementById("logout").disabled = true;
 		status = param;
 	} else if (param == ADMIN_ADDED) {
-		alert("Admin added");
+		async_alert("Admin added");
 		return;
 	}
 }
