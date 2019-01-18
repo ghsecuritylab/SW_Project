@@ -1,0 +1,41 @@
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1 user-scalable=no">
+</head>
+<body>
+<div> My div </div>
+<script>
+	setInterval(function(){ location.reload(true); }, 10000);
+</script>
+<div class="container">
+	<div class="panel panel-default">
+	  <div class="panel-heading">Nucleo LEDs</div>
+	  <div class="panel-body">
+	    <div class="row">
+		  <div class="col-md-6 cell">
+		     <button type="button" class="btn btn-default btn-block led" id="led1">LED1</button>
+		  </div>
+		  <div class="col-md-6 cell">
+		  	 <button type="button" class="btn btn-default btn-block led" id="led2">LED2</button>
+		  </div>	  	 
+		  <div class="col-md-6 cell">
+		  	 <button type="button" class="btn btn-default btn-block led" id="led3">LED3</button>
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="panel panel-default">
+	  <div class="panel-heading">Nucleo USER BUTTON</div>
+	  <div class="panel-body">
+	     <div id="usr-btn" class="alert alert-info" role="alert"><b>OFF</b></div>
+	  </div>
+	</div>	
+	<div class="panel panel-default">
+	  <div class="panel-heading">MCU Temperature</div>
+	  <div class="panel-body">
+	     <div id="mcu-temp" class="alert alert-warning" role="alert"><b>TEMP</b></div>
+	  </div>
+	</div>	
+</div>
+</body>
+</html>
