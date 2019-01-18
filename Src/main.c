@@ -73,6 +73,7 @@ osThreadId defaultTaskHandle;
 /* Private variables ---------------------------------------------------------*/
 extern struct netif gnetif;
 int privilage_status = 2;
+int add_admin = 0;
 
 /* USER CODE END PV */
 
@@ -385,9 +386,9 @@ static void MX_GPIO_Init(void)
 //tmp
 int check_tag_if_admin(char * CardID) {
 
-//	if(strcmp(CardID, "0xc48150d3") == 0)
-//		return 1;
-//	return 0;
+	if(strcmp(CardID, "0xc48150d3") == 0)
+		return 1;
+	return 0;
 }
 
 
@@ -427,18 +428,17 @@ void StartDefaultTask(void const * argument)
   		  ip4_addr2(&gnetif.ip_addr),
   		  ip4_addr3(&gnetif.ip_addr),
   		  ip4_addr4(&gnetif.ip_addr));
-  osDelay(10000);
+  osDelay(1000);
   privilage_status = 2;
   http_server_netconn_init();
   tag_scanner_init();
-  xprintf("I'm right here!\n\r");
 
   /* Infinite loop */
   for(;;)
   {
     osDelay(120000); // wait 2 minutes, then change privileges to other
     // TODO probably won't work since thread priority too small
-    privilage_status = 2;
+    privilage_status = ADMIN_PRIVILAGE;
     xprintf("main looop\n\r");
   }
   /* USER CODE END 5 */ 

@@ -15,15 +15,33 @@
 #include "tag_scanner.h"
 #include "rfid-rc522.h"
 
-static int admin_ids[ADMIN_LIMIT] = {981, 0, 0, 0, 0};
+static int admin_ids[ADMIN_LIMIT] = {74821, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 int hash_id(uint8_t cardID[4]) {
-	return ((cardID[0] * cardID[1]) % 2017 - cardID[3] + cardID[4]) % 2019;
+	int result = 0;
+	result += (int) cardID[3];
+	result += (int) cardID[2];
+	result *= 2*2*2*2*2*2*2*2;
+	result += (int) cardID[1];
+	result += (int) cardID[0];
+	return result;
+	//return (((int)cardID[0] * (int)cardID[1]) % 2017 - (int)cardID[3] + (int)cardID[4]) % 2019;
+}
+
+void
+add_to_admin_list(int cardID_hash) {
+	for(int i = 0; i < ADMIN_LIMIT; i++) {
+		if(admin_ids[i] == 0) {
+			admin_ids[i] = cardID_hash;
+			break;
+		}
+	}
 }
 
 void
 adjust_privilages(uint8_t CardID[4]) {
 	privilage_status = USER_PRIVILAGE;
+	xprintf("%d\r\n", hash_id(CardID));
 	for(int i = 0; i < ADMIN_LIMIT; ++i) {
 		if(hash_id(CardID) == admin_ids[i]) {
 			privilage_status = ADMIN_PRIVILAGE;
@@ -55,7 +73,11 @@ tag_scanner_thread() {
 			xprintf((char *)result);
 			xprintf((char *)"\n\r");
 
-			adjust_privilages(CardID);
+			if(privilage_status == ADMIN_PRIVILAGE && add_admin == 1) {
+				add_to_admin_list(hash_id(CardID));
+			} else {
+				adjust_privilages(CardID);
+			}
 
 		} else {
 			if (status == MI_TIMEOUT) {

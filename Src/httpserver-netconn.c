@@ -39,7 +39,7 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
-#define WEBSERVER_THREAD_PRIO    ( osPriorityNormal )
+#define WEBSERVER_THREAD_PRIO    ( osPriorityRealtime )
 
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
@@ -78,12 +78,15 @@ void http_server_serve(struct netconn *conn)
     		  netconn_write(conn, (const unsigned char*)index_html, index_html_len, NETCONN_NOCOPY);
     	  }
     	  if (strncmp((char const *)buf,"GET /led1", 9) == 0) {
+    		  xprintf("led1\r\n");
     		  HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
     	  }
-    	  if (strncmp((char const *)buf,"GET /led2", 9) == 0 && privilage_status == USER_PRIVILAGE) {
+    	  if (strncmp((char const *)buf,"GET /led2", 9) == 0) {
+    		  xprintf("led1\r\n");
     		  HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
     	  }
-    	  if (strncmp((char const *)buf,"GET /led3", 9) == 0 && privilage_status == ADMIN_PRIVILAGE) {
+    	  if (strncmp((char const *)buf,"GET /led3", 9) == 0) {
+    		  xprintf("led1\r\n");
     		  HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
     	  }
       }
@@ -122,14 +125,13 @@ static void http_server_netconn_thread()
   
       while(1)
       {
-//    	  if(privilage_status == 0)
-//    		  xprintf("admin\n\r");
-//    	  if(privilage_status == 1)
-//    		  xprintf("user\n\r");
-//    	  if(privilage_status == 2)
-//    		  xprintf("other\n\r");
+    	  if(privilage_status == 0)
+    		  xprintf("admin\n\r");
+    	  if(privilage_status == 1)
+    		  xprintf("user\n\r");
+    	  if(privilage_status == 2)
+    		  xprintf("other\n\r");
     	  osDelay(10);
-    	  if(privilage_status)
         /* accept any icoming connection */
         accept_err = netconn_accept(conn, &newconn);
         if(accept_err == ERR_OK)

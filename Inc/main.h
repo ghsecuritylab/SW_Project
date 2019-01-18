@@ -141,6 +141,7 @@
 #define SPIx_CS_GPIO_PORT                GPIOD
 
 extern int privilage_status;
+extern int add_admin;
 
 
 /* USER CODE END Private defines */

@@ -8,14 +8,14 @@
 #ifndef TAG_SCANNER_H_
 #define TAG_SCANNER_H_
 
-#define TAG_SCANNER_THREAD_STACK_SIZE 128
-#define TAG_SCANNER_THREAD_PRIO ( osPriorityRealtime )
+#define TAG_SCANNER_THREAD_STACK_SIZE 256
+#define TAG_SCANNER_THREAD_PRIO ( osPriorityHigh )
 
 #define ADMIN_PRIVILAGE 0
 #define USER_PRIVILAGE 1
 #define OTHER_PRIVILAGE 2
 
-#define ADMIN_LIMIT 5
+#define ADMIN_LIMIT 10
 
 void
 tag_scanner_init();
