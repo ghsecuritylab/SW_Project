@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <title>Nucleo iterface</title>
-<link rel="stylesheet" type="text/plain" href="mystyle.css">
+<link rel="stylesheet" type="text/css" href="mystyle.css">
 <script src="javascript.js"></script>
 </head>
 <body>
@@ -16,7 +16,7 @@
 				<button style="background: lightgreen;" class="led-button" name="led_nr" type="submit" value="1">
 					Green LED
 				</button>
-				<button id="b-blue" style="background: lightblue;" class="led-button" class="led-button" name="led_nr" type="submit" value="2">
+				<button id="b-blue" style="background: lightblue;" class="led-button" class="led-button" name="led_nr" type="submit" value="2" disabled>
 					Blue LED
 				</button>
 				<button id="b-red" style="background: tomato;" class="led-button" class="led-button" name="led_nr" type="submit" value="3" disabled>
@@ -27,9 +27,9 @@
 		</div>
 		<div class="row">
 			<form action="adminID" method="get">
-			  <text class="input-header">CardID:</text><br>
-			  <input id="input" class="input" type="text" name="cardID" disabled><br>
-			  <input id="submit" type="submit" value="submit" disabled>
+			  	<button id="submit" style="background: green;" class="led-button" type="submit" disabled>
+					Add admin
+				</button>
 			</form>
 		</div>
 		<div class="row">

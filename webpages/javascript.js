@@ -12,19 +12,16 @@ function twiddleDOM(param) {
 	if (param == 0) {
 		document.getElementById("b-blue").disabled = false;
 		document.getElementById("b-red").disabled = false;
-		document.getElementById("input").disabled = false;
 		document.getElementById("submit").disabled = false;
 		document.getElementById("logout").disabled = false;
 	} else if (param == 1) {
 		document.getElementById("b-blue").disabled = false;
 		document.getElementById("b-red").disabled = true;
-		document.getElementById("input").disabled = true;
 		document.getElementById("submit").disabled = true;
 		document.getElementById("logout").disabled = false;
 	} else {
 		document.getElementById("b-blue").disabled = true;
 		document.getElementById("b-red").disabled = true;
-		document.getElementById("input").disabled = true;
 		document.getElementById("submit").disabled = true;
 		document.getElementById("logout").disabled = true;
 	}
