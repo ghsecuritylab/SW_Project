@@ -1,37 +1,45 @@
+<!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1 user-scalable=no">
+<meta charset="utf-8" />
+<title>Nucleo iterface</title>
+<link rel="stylesheet" type="text/plain" href="mystyle.css">
+<script src="javascript.js"></script>
 </head>
 <body>
 <div class="container">
-	<div class="panel panel-default">
-	  <div class="panel-heading">Nucleo LEDs</div>
+	  <div class="panel-heading">Toggle LEDs:</div>
 	  <div class="panel-body">
 	    <div class="row">
 		  <div class="col-md-6 cell">
-		     <button type="button" class="btn btn-default btn-block led" id="led1">LED1</button>
-		  </div>
-		  <div class="col-md-6 cell">
-		  	 <button type="button" class="btn btn-default btn-block led" id="led2">LED2</button>
-		  </div>	  	 
-		  <div class="col-md-6 cell">
-		  	 <button type="button" class="btn btn-default btn-block led" id="led3">LED3</button>
+		  	<form class="form-layout" action="led" method="get">
+				<button style="background: lightgreen;" class="led-button" name="led_nr" type="submit" value="1">
+					Green LED
+				</button>
+				<button id="b-blue" style="background: lightblue;" class="led-button" class="led-button" name="led_nr" type="submit" value="2">
+					Blue LED
+				</button>
+				<button id="b-red" style="background: tomato;" class="led-button" class="led-button" name="led_nr" type="submit" value="3" disabled>
+					Red LED
+				</button>
+			</form>
 		  </div>
 		</div>
-	  </div>
+		<div class="row">
+			<form action="adminID" method="get">
+			  <text class="input-header">CardID:</text><br>
+			  <input id="input" class="input" type="text" name="cardID" disabled><br>
+			  <input id="submit" type="submit" value="submit" disabled>
+			</form>
+		</div>
+		<div class="row">
+			<form action="logout" method="get">
+				<button id="logout" name="led_nr" type="submit" disabled>
+					Log out
+				</button>
+			</form>
+		</div>
 	</div>
-	<div class="panel panel-default">
-	  <div class="panel-heading">Nucleo USER BUTTON</div>
-	  <div class="panel-body">
-	     <div id="usr-btn" class="alert alert-info" role="alert"><b>OFF</b></div>
-	  </div>
-	</div>	
-	<div class="panel panel-default">
-	  <div class="panel-heading">MCU Temperature</div>
-	  <div class="panel-body">
-	     <div id="mcu-temp" class="alert alert-warning" role="alert"><b>TEMP</b></div>
-	  </div>
-	</div>	
 </div>
 </body>
 </html>

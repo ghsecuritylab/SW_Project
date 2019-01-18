@@ -1,0 +1,52 @@
+.container {
+	font-size: 12px;
+	height: 800px;
+}
+.panel-heading {
+	font-size: 16px;
+	font-weight: bold;
+	text-align:center;
+	margin: 30px;
+}
+
+.panel-body {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	height: 100%;
+}
+
+.row {
+	height: 20%;
+}
+
+.form-layout {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	justify-content: space-around;
+}
+
+.input-header {
+	font-size: 12px;
+	font-weight: bold;
+}
+
+.led-button {
+	width: 150px;
+	height: 30px;
+	margin: 5px;
+	border-radius: 4px;
+}
+
+.led-button:hover {
+	box-shadow: 1px 1px grey;
+}
+
+.led-button[disabled] {
+	pointer-events: none;
+}
+
+.input {
+	margin: 10px;
+}

@@ -72,7 +72,7 @@ osThreadId defaultTaskHandle;
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
 extern struct netif gnetif;
-int privilage_status = 2;
+int privilage_status = 0;
 int add_admin = 0;
 
 /* USER CODE END PV */
@@ -384,12 +384,12 @@ static void MX_GPIO_Init(void)
 
 
 //tmp
-int check_tag_if_admin(char * CardID) {
-
-	if(strcmp(CardID, "0xc48150d3") == 0)
-		return 1;
-	return 0;
-}
+//int check_tag_if_admin(char * CardID) {
+//
+//	if(strcmp(CardID, "0xc48150d3") == 0)
+//		return 1;
+//	return 0;
+//}
 
 
 
@@ -429,7 +429,7 @@ void StartDefaultTask(void const * argument)
   		  ip4_addr3(&gnetif.ip_addr),
   		  ip4_addr4(&gnetif.ip_addr));
   osDelay(1000);
-  privilage_status = 2;
+  privilage_status = 0;
   http_server_netconn_init();
   tag_scanner_init();
 

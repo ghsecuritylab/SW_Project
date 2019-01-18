@@ -32,8 +32,9 @@
 #include "string.h"
 #include "httpserver-netconn.h"
 #include "cmsis_os.h"
-#include "../webpages/index.h"
-#include "../webpages/new_site.h"
+#include "../webpages/index_h.h"
+#include "../webpages/javascript_h.h"
+#include "../webpages/mystyle_h.h"
 #include "term_io.h"
 #include "tag_scanner.h"
 
@@ -74,20 +75,48 @@ void http_server_serve(struct netconn *conn)
       there are other formats for GET, and we're keeping it very simple )*/
       if ((buflen >=5) && (strncmp(buf, "GET /", 5) == 0))
       {
-    	  if (strncmp((char const *)buf,"GET /index.html",15)==0) {
-    		  netconn_write(conn, (const unsigned char*)index_html, index_html_len, NETCONN_NOCOPY);
+		  if (strncmp((char const *)buf,"GET /stat",9)==0) {
+			  char priv_str[1];
+			  priv_str[0] = (char) privilage_status + '0';
+			  netconn_write(conn, priv_str, 1, NETCONN_NOCOPY);
+		  }
+       	  if (strncmp((char const *)buf,"GET /index.html",15)==0) {
+        		  netconn_write(conn, (const unsigned char*)index_h, index_h_length, NETCONN_NOCOPY);
+       	  }
+       	  if (strncmp((char const *)buf,"GET /javascript.js",18)==0) {
+        		  netconn_write(conn, (const unsigned char*)javascript_h, javascript_h_length, NETCONN_NOCOPY);
+       	  }
+		  if (strncmp((char const *)buf,"GET /mystyle.css",16)==0) {
+			  netconn_write(conn, (const unsigned char*)mystyle_h, mystyle_h_length, NETCONN_NOCOPY);
+		  }
+		  if (strncmp((char const *)buf,"GET /led?led_nr=1", 17) == 0) {
+			  xprintf("led1\r\n");
+			  HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
+			  netconn_write(conn, (const unsigned char*)index_h, index_h_length, NETCONN_NOCOPY);
+		  }
+		  if (strncmp((char const *)buf,"GET /logout?led_nr=", 19) == 0) {
+			  xprintf("logout");
+			  privilage_status = OTHER_PRIVILAGE;
+			  netconn_write(conn, (const unsigned char*)index_h, index_h_length, NETCONN_NOCOPY);
+		  }
+    	  if(privilage_status <= USER_PRIVILAGE) {
+        	  if (strncmp((char const *)buf,"GET /led?led_nr=2", 17) == 0) {
+        		  xprintf("led2\r\n");
+        		  HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+        		  netconn_write(conn, (const unsigned char*)index_h, index_h_length, NETCONN_NOCOPY);
+        	  }
     	  }
-    	  if (strncmp((char const *)buf,"GET /led1", 9) == 0) {
-    		  xprintf("led1\r\n");
-    		  HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
-    	  }
-    	  if (strncmp((char const *)buf,"GET /led2", 9) == 0) {
-    		  xprintf("led1\r\n");
-    		  HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-    	  }
-    	  if (strncmp((char const *)buf,"GET /led3", 9) == 0) {
-    		  xprintf("led1\r\n");
-    		  HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
+    	  if(privilage_status == ADMIN_PRIVILAGE) {
+			  if (strncmp((char const *)buf,"GET /led?led_nr=3", 17) == 0) {
+				  xprintf("led3\r\n");
+				  HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
+				  netconn_write(conn, (const unsigned char*)index_h, index_h_length, NETCONN_NOCOPY);
+			  }
+			  if (strncmp((char const *)buf,"GET /adminID?cardID=", 20) == 0) {
+				  xprintf("add admin\r\n");
+				  add_to_admin_list(&buf[19]);
+				  netconn_write(conn, (const unsigned char*)index_h, index_h_length, NETCONN_NOCOPY);
+			  }
     	  }
       }
     }
@@ -156,3 +185,4 @@ void http_server_netconn_init()
 {
   sys_thread_new("HTTP", http_server_netconn_thread, NULL, DEFAULT_THREAD_STACKSIZE, WEBSERVER_THREAD_PRIO);
 }
+

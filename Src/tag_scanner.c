@@ -53,8 +53,6 @@ adjust_privilages(uint8_t CardID[4]) {
 static void
 tag_scanner_thread() {
 	while(1) {
-		osDelay(100);
-		HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
 
 		uint8_t CardID[4];
 		uint8_t type;
